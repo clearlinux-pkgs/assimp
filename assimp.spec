@@ -4,13 +4,14 @@
 #
 Name     : assimp
 Version  : 5.0.1
-Release  : 7
+Release  : 8
 URL      : https://github.com/assimp/assimp/archive/v5.0.1/assimp-5.0.1.tar.gz
 Source0  : https://github.com/assimp/assimp/archive/v5.0.1/assimp-5.0.1.tar.gz
 Summary  : Import various well-known 3D model formats in an uniform manner.
 Group    : Development/Tools
 License  : BSD-3-Clause BSL-1.0 LGPL-3.0 MIT Unlicense
 Requires: assimp-bin = %{version}-%{release}
+Requires: assimp-filemap = %{version}-%{release}
 Requires: assimp-lib = %{version}-%{release}
 Requires: assimp-license = %{version}-%{release}
 BuildRequires : buildreq-cmake
@@ -32,6 +33,7 @@ See Readme.md
 Summary: bin components for the assimp package.
 Group: Binaries
 Requires: assimp-license = %{version}-%{release}
+Requires: assimp-filemap = %{version}-%{release}
 
 %description bin
 bin components for the assimp package.
@@ -49,10 +51,19 @@ Requires: assimp = %{version}-%{release}
 dev components for the assimp package.
 
 
+%package filemap
+Summary: filemap components for the assimp package.
+Group: Default
+
+%description filemap
+filemap components for the assimp package.
+
+
 %package lib
 Summary: lib components for the assimp package.
 Group: Libraries
 Requires: assimp-license = %{version}-%{release}
+Requires: assimp-filemap = %{version}-%{release}
 
 %description lib
 lib components for the assimp package.
@@ -75,20 +86,34 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1585193441
+export SOURCE_DATE_EPOCH=1634055827
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
-export CFLAGS="$CFLAGS -fno-lto "
-export FCFLAGS="$CFLAGS -fno-lto "
-export FFLAGS="$CFLAGS -fno-lto "
-export CXXFLAGS="$CXXFLAGS -fno-lto "
+export CFLAGS="$CFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mno-vzeroupper -mprefer-vector-width=256 "
+export FCFLAGS="$FFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mno-vzeroupper -mprefer-vector-width=256 "
+export FFLAGS="$FFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mno-vzeroupper -mprefer-vector-width=256 "
+export CXXFLAGS="$CXXFLAGS -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -mno-vzeroupper -mprefer-vector-width=256 "
 %cmake .. -DASSIMP_LIB_INSTALL_DIR=lib64
-make  %{?_smp_mflags}  VERBOSE=1
+make  %{?_smp_mflags}
+popd
+mkdir -p clr-build-avx2
+pushd clr-build-avx2
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -O3 -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mno-vzeroupper -mprefer-vector-width=256 -mtune=skylake "
+export FCFLAGS="$FFLAGS -O3 -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mno-vzeroupper -mprefer-vector-width=256 -mtune=skylake "
+export FFLAGS="$FFLAGS -O3 -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mno-vzeroupper -mprefer-vector-width=256 -mtune=skylake "
+export CXXFLAGS="$CXXFLAGS -O3 -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mno-vzeroupper -mprefer-vector-width=256 -mtune=skylake "
+export CFLAGS="$CFLAGS -march=x86-64-v3 -m64"
+export CXXFLAGS="$CXXFLAGS -march=x86-64-v3 -m64"
+export FFLAGS="$FFLAGS -march=x86-64-v3 -m64"
+export FCFLAGS="$FCFLAGS -march=x86-64-v3 -m64"
+%cmake .. -DASSIMP_LIB_INSTALL_DIR=lib64
+make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1585193441
+export SOURCE_DATE_EPOCH=1634055827
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/assimp
 cp %{_builddir}/assimp-5.0.1/LICENSE %{buildroot}/usr/share/package-licenses/assimp/e17e89e763a2dee69f8930e7f292e836329003ca
@@ -103,6 +128,10 @@ cp %{_builddir}/assimp-5.0.1/packaging/windows-innosetup/LICENSE.rtf %{buildroot
 cp %{_builddir}/assimp-5.0.1/test/models-nonbsd/Ogre/OgreSDK/LICENSE %{buildroot}/usr/share/package-licenses/assimp/da5043f355a0fc628eb5877ba44e42f40582bdda
 cp %{_builddir}/assimp-5.0.1/test/models-nonbsd/PLY/ant-half.ply.license %{buildroot}/usr/share/package-licenses/assimp/e203d4ef09d404fa5c03cf6590e44231665be689
 cp %{_builddir}/assimp-5.0.1/test/models/glTF2/glTF-Asset-Generator/LICENSE %{buildroot}/usr/share/package-licenses/assimp/b4152265e76a4e82d7e34bc1b95e07bda51bca73
+pushd clr-build-avx2
+%make_install_v3  || :
+/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot}/usr/share/clear/optimized-elf/ %{buildroot}/usr/share/clear/filemap/filemap-%{name}
+popd
 pushd clr-build
 %make_install
 popd
@@ -113,6 +142,7 @@ popd
 %files bin
 %defattr(-,root,root,-)
 /usr/bin/assimp
+/usr/share/clear/optimized-elf/bin*
 
 %files dev
 %defattr(-,root,root,-)
@@ -207,10 +237,15 @@ popd
 /usr/lib64/libassimp.so
 /usr/lib64/pkgconfig/assimp.pc
 
+%files filemap
+%defattr(-,root,root,-)
+/usr/share/clear/filemap/filemap-assimp
+
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libassimp.so.5
 /usr/lib64/libassimp.so.5.0.0
+/usr/share/clear/optimized-elf/lib*
 
 %files license
 %defattr(0644,root,root,0755)
