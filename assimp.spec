@@ -4,7 +4,7 @@
 #
 Name     : assimp
 Version  : 5.0.1
-Release  : 8
+Release  : 9
 URL      : https://github.com/assimp/assimp/archive/v5.0.1/assimp-5.0.1.tar.gz
 Source0  : https://github.com/assimp/assimp/archive/v5.0.1/assimp-5.0.1.tar.gz
 Summary  : Import various well-known 3D model formats in an uniform manner.
@@ -86,7 +86,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1634055827
+export SOURCE_DATE_EPOCH=1634664978
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -100,20 +100,20 @@ popd
 mkdir -p clr-build-avx2
 pushd clr-build-avx2
 export GCC_IGNORE_WERROR=1
-export CFLAGS="$CFLAGS -O3 -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mno-vzeroupper -mprefer-vector-width=256 -mtune=skylake "
-export FCFLAGS="$FFLAGS -O3 -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mno-vzeroupper -mprefer-vector-width=256 -mtune=skylake "
-export FFLAGS="$FFLAGS -O3 -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mno-vzeroupper -mprefer-vector-width=256 -mtune=skylake "
-export CXXFLAGS="$CXXFLAGS -O3 -Ofast -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mno-vzeroupper -mprefer-vector-width=256 -mtune=skylake "
-export CFLAGS="$CFLAGS -march=x86-64-v3 -m64"
-export CXXFLAGS="$CXXFLAGS -march=x86-64-v3 -m64"
-export FFLAGS="$FFLAGS -march=x86-64-v3 -m64"
-export FCFLAGS="$FCFLAGS -march=x86-64-v3 -m64"
+export CFLAGS="$CFLAGS -O3 -Ofast -Wl,-z,x86-64-v3 -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mno-vzeroupper -mprefer-vector-width=256 -mtune=skylake "
+export FCFLAGS="$FFLAGS -O3 -Ofast -Wl,-z,x86-64-v3 -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mno-vzeroupper -mprefer-vector-width=256 -mtune=skylake "
+export FFLAGS="$FFLAGS -O3 -Ofast -Wl,-z,x86-64-v3 -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mno-vzeroupper -mprefer-vector-width=256 -mtune=skylake "
+export CXXFLAGS="$CXXFLAGS -O3 -Ofast -Wl,-z,x86-64-v3 -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mno-vzeroupper -mprefer-vector-width=256 -mtune=skylake "
+export CFLAGS="$CFLAGS -march=x86-64-v3 -m64 -Wl,-z,x86-64-v3"
+export CXXFLAGS="$CXXFLAGS -march=x86-64-v3 -m64 -Wl,-z,x86-64-v3"
+export FFLAGS="$FFLAGS -march=x86-64-v3 -m64 -Wl,-z,x86-64-v3"
+export FCFLAGS="$FCFLAGS -march=x86-64-v3 -m64 -Wl,-z,x86-64-v3"
 %cmake .. -DASSIMP_LIB_INSTALL_DIR=lib64
 make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1634055827
+export SOURCE_DATE_EPOCH=1634664978
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/assimp
 cp %{_builddir}/assimp-5.0.1/LICENSE %{buildroot}/usr/share/package-licenses/assimp/e17e89e763a2dee69f8930e7f292e836329003ca
@@ -130,11 +130,11 @@ cp %{_builddir}/assimp-5.0.1/test/models-nonbsd/PLY/ant-half.ply.license %{build
 cp %{_builddir}/assimp-5.0.1/test/models/glTF2/glTF-Asset-Generator/LICENSE %{buildroot}/usr/share/package-licenses/assimp/b4152265e76a4e82d7e34bc1b95e07bda51bca73
 pushd clr-build-avx2
 %make_install_v3  || :
-/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot}/usr/share/clear/optimized-elf/ %{buildroot}/usr/share/clear/filemap/filemap-%{name}
 popd
 pushd clr-build
 %make_install
 popd
+/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot}/usr/share/clear/optimized-elf/ %{buildroot}/usr/share/clear/filemap/filemap-%{name}
 
 %files
 %defattr(-,root,root,-)
