@@ -4,7 +4,7 @@
 #
 Name     : assimp
 Version  : 5.0.1
-Release  : 10
+Release  : 11
 URL      : https://github.com/assimp/assimp/archive/v5.0.1/assimp-5.0.1.tar.gz
 Source0  : https://github.com/assimp/assimp/archive/v5.0.1/assimp-5.0.1.tar.gz
 Summary  : Import various well-known 3D model formats in an uniform manner.
@@ -86,7 +86,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1635711214
+export SOURCE_DATE_EPOCH=1635713231
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -113,7 +113,7 @@ make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1635711214
+export SOURCE_DATE_EPOCH=1635713231
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/assimp
 cp %{_builddir}/assimp-5.0.1/LICENSE %{buildroot}/usr/share/package-licenses/assimp/e17e89e763a2dee69f8930e7f292e836329003ca
@@ -134,6 +134,9 @@ popd
 pushd clr-build
 %make_install
 popd
+## install_append content
+sed -i -e "s/\/lib\//\/lib64\//g"      %{buildroot}/usr/lib64/cmake/assimp-5.0/assimpTargets-release.cmake
+## install_append end
 /usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot}/usr/share/clear/optimized-elf/ %{buildroot}/usr/share/clear/filemap/filemap-%{name}
 
 %files
