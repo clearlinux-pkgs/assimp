@@ -4,7 +4,7 @@
 #
 Name     : assimp
 Version  : 5.0.1
-Release  : 19
+Release  : 20
 URL      : https://github.com/assimp/assimp/archive/v5.0.1/assimp-5.0.1.tar.gz
 Source0  : https://github.com/assimp/assimp/archive/v5.0.1/assimp-5.0.1.tar.gz
 Summary  : Import various well-known 3D model formats in an uniform manner.
@@ -77,6 +77,15 @@ Group: Default
 license components for the assimp package.
 
 
+%package staticdev
+Summary: staticdev components for the assimp package.
+Group: Default
+Requires: assimp-dev = %{version}-%{release}
+
+%description staticdev
+staticdev components for the assimp package.
+
+
 %prep
 %setup -q -n assimp-5.0.1
 cd %{_builddir}/assimp-5.0.1
@@ -86,7 +95,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1656090364
+export SOURCE_DATE_EPOCH=1662582243
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -100,10 +109,10 @@ popd
 mkdir -p clr-build-avx2
 pushd clr-build-avx2
 export GCC_IGNORE_WERROR=1
-export CFLAGS="$CFLAGS -O3 -Ofast -Wl,-z,x86-64-v3 -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mprefer-vector-width=256 -msse2avx -mtune=skylake "
-export FCFLAGS="$FFLAGS -O3 -Ofast -Wl,-z,x86-64-v3 -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mprefer-vector-width=256 -msse2avx -mtune=skylake "
-export FFLAGS="$FFLAGS -O3 -Ofast -Wl,-z,x86-64-v3 -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mprefer-vector-width=256 -msse2avx -mtune=skylake "
-export CXXFLAGS="$CXXFLAGS -O3 -Ofast -Wl,-z,x86-64-v3 -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mprefer-vector-width=256 -msse2avx -mtune=skylake "
+export CFLAGS="$CFLAGS -O3 -Ofast -Wl,-z,x86-64-v3 -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mprefer-vector-width=256 -mtune=skylake "
+export FCFLAGS="$FFLAGS -O3 -Ofast -Wl,-z,x86-64-v3 -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mprefer-vector-width=256 -mtune=skylake "
+export FFLAGS="$FFLAGS -O3 -Ofast -Wl,-z,x86-64-v3 -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mprefer-vector-width=256 -mtune=skylake "
+export CXXFLAGS="$CXXFLAGS -O3 -Ofast -Wl,-z,x86-64-v3 -falign-functions=32 -fno-lto -fno-semantic-interposition -march=x86-64-v3 -mprefer-vector-width=256 -mtune=skylake "
 export CFLAGS="$CFLAGS -march=x86-64-v3 -m64 -Wl,-z,x86-64-v3"
 export CXXFLAGS="$CXXFLAGS -march=x86-64-v3 -m64 -Wl,-z,x86-64-v3"
 export FFLAGS="$FFLAGS -march=x86-64-v3 -m64 -Wl,-z,x86-64-v3"
@@ -113,21 +122,21 @@ make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1656090364
+export SOURCE_DATE_EPOCH=1662582243
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/assimp
-cp %{_builddir}/assimp-5.0.1/LICENSE %{buildroot}/usr/share/package-licenses/assimp/e17e89e763a2dee69f8930e7f292e836329003ca
-cp %{_builddir}/assimp-5.0.1/contrib/clipper/License.txt %{buildroot}/usr/share/package-licenses/assimp/e4b7506d9f00ccf4a353cd90c412d960284b776c
-cp %{_builddir}/assimp-5.0.1/contrib/gtest/LICENSE %{buildroot}/usr/share/package-licenses/assimp/5a2314153eadadc69258a9429104cd11804ea304
-cp %{_builddir}/assimp-5.0.1/contrib/openddlparser/LICENSE %{buildroot}/usr/share/package-licenses/assimp/2cb5e9994220f1b4cbcb8fe617c5936a33414d6c
-cp %{_builddir}/assimp-5.0.1/contrib/poly2tri/LICENSE %{buildroot}/usr/share/package-licenses/assimp/3c4a0cf53278b001dd25ca8dea8d543fc0374181
-cp %{_builddir}/assimp-5.0.1/contrib/rapidjson/license.txt %{buildroot}/usr/share/package-licenses/assimp/47ab05791f28173ad2b82f25c2b5c7fc06252b4d
-cp %{_builddir}/assimp-5.0.1/contrib/zip/UNLICENSE %{buildroot}/usr/share/package-licenses/assimp/37b4d8fc2380f796ce8ca0cb52c23238b9ed8163
-cp %{_builddir}/assimp-5.0.1/contrib/zlib/contrib/dotzlib/LICENSE_1_0.txt %{buildroot}/usr/share/package-licenses/assimp/3f317fbb3e08fd99169d2e77105d562ea0e482c7
-cp %{_builddir}/assimp-5.0.1/packaging/windows-innosetup/LICENSE.rtf %{buildroot}/usr/share/package-licenses/assimp/ae6afd9b31956c3be7ffcfa0f719aa4769042a9d
-cp %{_builddir}/assimp-5.0.1/test/models-nonbsd/Ogre/OgreSDK/LICENSE %{buildroot}/usr/share/package-licenses/assimp/da5043f355a0fc628eb5877ba44e42f40582bdda
-cp %{_builddir}/assimp-5.0.1/test/models-nonbsd/PLY/ant-half.ply.license %{buildroot}/usr/share/package-licenses/assimp/e203d4ef09d404fa5c03cf6590e44231665be689
-cp %{_builddir}/assimp-5.0.1/test/models/glTF2/glTF-Asset-Generator/LICENSE %{buildroot}/usr/share/package-licenses/assimp/b4152265e76a4e82d7e34bc1b95e07bda51bca73
+cp %{_builddir}/assimp-%{version}/LICENSE %{buildroot}/usr/share/package-licenses/assimp/e17e89e763a2dee69f8930e7f292e836329003ca
+cp %{_builddir}/assimp-%{version}/contrib/clipper/License.txt %{buildroot}/usr/share/package-licenses/assimp/e4b7506d9f00ccf4a353cd90c412d960284b776c
+cp %{_builddir}/assimp-%{version}/contrib/gtest/LICENSE %{buildroot}/usr/share/package-licenses/assimp/5a2314153eadadc69258a9429104cd11804ea304
+cp %{_builddir}/assimp-%{version}/contrib/openddlparser/LICENSE %{buildroot}/usr/share/package-licenses/assimp/2cb5e9994220f1b4cbcb8fe617c5936a33414d6c
+cp %{_builddir}/assimp-%{version}/contrib/poly2tri/LICENSE %{buildroot}/usr/share/package-licenses/assimp/3c4a0cf53278b001dd25ca8dea8d543fc0374181
+cp %{_builddir}/assimp-%{version}/contrib/rapidjson/license.txt %{buildroot}/usr/share/package-licenses/assimp/47ab05791f28173ad2b82f25c2b5c7fc06252b4d
+cp %{_builddir}/assimp-%{version}/contrib/zip/UNLICENSE %{buildroot}/usr/share/package-licenses/assimp/37b4d8fc2380f796ce8ca0cb52c23238b9ed8163
+cp %{_builddir}/assimp-%{version}/contrib/zlib/contrib/dotzlib/LICENSE_1_0.txt %{buildroot}/usr/share/package-licenses/assimp/3f317fbb3e08fd99169d2e77105d562ea0e482c7
+cp %{_builddir}/assimp-%{version}/packaging/windows-innosetup/LICENSE.rtf %{buildroot}/usr/share/package-licenses/assimp/ae6afd9b31956c3be7ffcfa0f719aa4769042a9d
+cp %{_builddir}/assimp-%{version}/test/models-nonbsd/Ogre/OgreSDK/LICENSE %{buildroot}/usr/share/package-licenses/assimp/da5043f355a0fc628eb5877ba44e42f40582bdda
+cp %{_builddir}/assimp-%{version}/test/models-nonbsd/PLY/ant-half.ply.license %{buildroot}/usr/share/package-licenses/assimp/e203d4ef09d404fa5c03cf6590e44231665be689
+cp %{_builddir}/assimp-%{version}/test/models/glTF2/glTF-Asset-Generator/LICENSE %{buildroot}/usr/share/package-licenses/assimp/b4152265e76a4e82d7e34bc1b95e07bda51bca73
 pushd clr-build-avx2
 %make_install_v3  || :
 popd
@@ -237,6 +246,7 @@ sed -i -e "s/\/lib\//\/lib64\//g"      %{buildroot}/usr/lib64/cmake/assimp-5.0/a
 /usr/lib64/cmake/assimp-5.0/assimp-config.cmake
 /usr/lib64/cmake/assimp-5.0/assimpTargets-release.cmake
 /usr/lib64/cmake/assimp-5.0/assimpTargets.cmake
+/usr/lib64/glibc-hwcaps/x86-64-v3/libassimp.so
 /usr/lib64/libassimp.so
 /usr/lib64/pkgconfig/assimp.pc
 
@@ -246,7 +256,6 @@ sed -i -e "s/\/lib\//\/lib64\//g"      %{buildroot}/usr/lib64/cmake/assimp-5.0/a
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/glibc-hwcaps/x86-64-v3/libassimp.so
 /usr/lib64/glibc-hwcaps/x86-64-v3/libassimp.so.5
 /usr/lib64/glibc-hwcaps/x86-64-v3/libassimp.so.5.0.0
 /usr/lib64/libassimp.so.5
@@ -266,3 +275,7 @@ sed -i -e "s/\/lib\//\/lib64\//g"      %{buildroot}/usr/lib64/cmake/assimp-5.0/a
 /usr/share/package-licenses/assimp/e17e89e763a2dee69f8930e7f292e836329003ca
 /usr/share/package-licenses/assimp/e203d4ef09d404fa5c03cf6590e44231665be689
 /usr/share/package-licenses/assimp/e4b7506d9f00ccf4a353cd90c412d960284b776c
+
+%files staticdev
+%defattr(-,root,root,-)
+/usr/lib64/glibc-hwcaps/x86-64-v3/libIrrXML.a
