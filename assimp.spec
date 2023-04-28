@@ -5,7 +5,7 @@
 #
 Name     : assimp
 Version  : 5.0.1
-Release  : 25
+Release  : 26
 URL      : https://github.com/assimp/assimp/archive/v5.0.1/assimp-5.0.1.tar.gz
 Source0  : https://github.com/assimp/assimp/archive/v5.0.1/assimp-5.0.1.tar.gz
 Summary  : Import various well-known 3D model formats in an uniform manner.
@@ -66,15 +66,6 @@ Group: Default
 license components for the assimp package.
 
 
-%package staticdev
-Summary: staticdev components for the assimp package.
-Group: Default
-Requires: assimp-dev = %{version}-%{release}
-
-%description staticdev
-staticdev components for the assimp package.
-
-
 %prep
 %setup -q -n assimp-5.0.1
 cd %{_builddir}/assimp-5.0.1
@@ -84,7 +75,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1682644586
+export SOURCE_DATE_EPOCH=1682701024
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -111,7 +102,7 @@ make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1682644586
+export SOURCE_DATE_EPOCH=1682701024
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/assimp
 cp %{_builddir}/assimp-%{version}/LICENSE %{buildroot}/usr/share/package-licenses/assimp/e17e89e763a2dee69f8930e7f292e836329003ca || :
@@ -139,14 +130,15 @@ sed -i -e "s/\/lib\//\/lib64\//g"      %{buildroot}/usr/lib64/cmake/assimp-5.0/a
 
 %files
 %defattr(-,root,root,-)
-/V3/usr/bin/assimp
 
 %files bin
 %defattr(-,root,root,-)
+/V3/usr/bin/assimp
 /usr/bin/assimp
 
 %files dev
 %defattr(-,root,root,-)
+/V3/usr/lib64/libassimp.so
 /usr/include/assimp/BaseImporter.h
 /usr/include/assimp/Bitmap.h
 /usr/include/assimp/BlobIOSystem.h
@@ -235,14 +227,13 @@ sed -i -e "s/\/lib\//\/lib64\//g"      %{buildroot}/usr/lib64/cmake/assimp-5.0/a
 /usr/lib64/cmake/assimp-5.0/assimp-config.cmake
 /usr/lib64/cmake/assimp-5.0/assimpTargets-release.cmake
 /usr/lib64/cmake/assimp-5.0/assimpTargets.cmake
-/usr/lib64/glibc-hwcaps/x86-64-v3/libassimp.so
 /usr/lib64/libassimp.so
 /usr/lib64/pkgconfig/assimp.pc
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/glibc-hwcaps/x86-64-v3/libassimp.so.5
-/usr/lib64/glibc-hwcaps/x86-64-v3/libassimp.so.5.0.0
+/V3/usr/lib64/libassimp.so.5
+/V3/usr/lib64/libassimp.so.5.0.0
 /usr/lib64/libassimp.so.5
 /usr/lib64/libassimp.so.5.0.0
 
@@ -260,7 +251,3 @@ sed -i -e "s/\/lib\//\/lib64\//g"      %{buildroot}/usr/lib64/cmake/assimp-5.0/a
 /usr/share/package-licenses/assimp/e17e89e763a2dee69f8930e7f292e836329003ca
 /usr/share/package-licenses/assimp/e203d4ef09d404fa5c03cf6590e44231665be689
 /usr/share/package-licenses/assimp/e4b7506d9f00ccf4a353cd90c412d960284b776c
-
-%files staticdev
-%defattr(-,root,root,-)
-/usr/lib64/glibc-hwcaps/x86-64-v3/libIrrXML.a
