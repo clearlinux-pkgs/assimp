@@ -5,7 +5,7 @@
 #
 Name     : assimp
 Version  : 5.0.1
-Release  : 26
+Release  : 27
 URL      : https://github.com/assimp/assimp/archive/v5.0.1/assimp-5.0.1.tar.gz
 Source0  : https://github.com/assimp/assimp/archive/v5.0.1/assimp-5.0.1.tar.gz
 Summary  : Import various well-known 3D model formats in an uniform manner.
@@ -75,7 +75,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1682701024
+export SOURCE_DATE_EPOCH=1685479776
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -102,7 +102,7 @@ make  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1682701024
+export SOURCE_DATE_EPOCH=1685479776
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/assimp
 cp %{_builddir}/assimp-%{version}/LICENSE %{buildroot}/usr/share/package-licenses/assimp/e17e89e763a2dee69f8930e7f292e836329003ca || :
@@ -138,7 +138,6 @@ sed -i -e "s/\/lib\//\/lib64\//g"      %{buildroot}/usr/lib64/cmake/assimp-5.0/a
 
 %files dev
 %defattr(-,root,root,-)
-/V3/usr/lib64/libassimp.so
 /usr/include/assimp/BaseImporter.h
 /usr/include/assimp/Bitmap.h
 /usr/include/assimp/BlobIOSystem.h
@@ -232,7 +231,6 @@ sed -i -e "s/\/lib\//\/lib64\//g"      %{buildroot}/usr/lib64/cmake/assimp-5.0/a
 
 %files lib
 %defattr(-,root,root,-)
-/V3/usr/lib64/libassimp.so.5
 /V3/usr/lib64/libassimp.so.5.0.0
 /usr/lib64/libassimp.so.5
 /usr/lib64/libassimp.so.5.0.0
